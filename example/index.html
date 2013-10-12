@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shoryuken test</title>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js'></script>
+    <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.3.5/knockout.mapping.js'></script>
+    <script src="http://js.pusher.com/2.1/pusher.min.js" type="text/javascript"></script>
+    <script type='text/javascript' src='../src/shoryuken.js'></script>
+  </head>
+
+  <body>
+    <div id="viewModel">
+      <p data-bind="text: foo"></p>
+      <ul data-bind="foreach: items" data-collection="items">
+        <li data-bind="text: content" data-model="item"></li>
+      </ul>
+    </div>
+    <script type="text/javascript">
+      // Enable pusher logging - don't include this in production
+      Pusher.log = function(message) {
+        if (window.console && window.console.log) {
+          window.console.log(message);
+        }
+      };
+
+      var pusher = new Pusher('your-pusher-key-here');
+      var channel = pusher.subscribe('test_channel');
+    </script>
+    <script type='text/javascript' src='main.js'></script>
+  </body>
+
+</html>
