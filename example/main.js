@@ -9,4 +9,4 @@ var data = {
 
 ko.applyBindings(data, document.getElementById("viewModel"));
 
-var viewModel = Shoryuken.observe(channel);
+Shoryuken.observe(channel);
