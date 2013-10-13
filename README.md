@@ -48,6 +48,7 @@ as follows:
 #### metaCreate
 
 Event name: `metaCreate`
+
 Event data:
 ```javascript
 {
@@ -64,6 +65,7 @@ Event data:
 #### metaUpdate
 
 Event name: `metaUpdate`
+
 Event data:
 ```javascript
 {
@@ -80,6 +82,7 @@ Event data:
 #### metaDestroy
 
 Event name: `metaDestroy`
+
 Event data:
 ```javascript
 {
