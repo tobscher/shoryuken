@@ -32,6 +32,101 @@
 <a name="shoryuken" class="anchor" href="#shoryuken"><span class="octicon octicon-link"></span></a>shoryuken</h1>
 
 <p>JavaScript library to integrate Pusher with Knockout</p>
+
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<h3>
+<a name="html" class="anchor" href="#html"><span class="octicon octicon-link"></span></a>HTML</h3>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"viewModel"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;ul</span> <span class="na">data-bind=</span><span class="s">"foreach: items"</span> <span class="na">data-collection=</span><span class="s">"items"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">data-bind=</span><span class="s">"text: content"</span> <span class="na">data-model=</span><span class="s">"item"</span><span class="nt">&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+
+<h3>
+<a name="javascript" class="anchor" href="#javascript"><span class="octicon octicon-link"></span></a>JavaScript</h3>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Initialize pusher</span>
+<span class="kd">var</span> <span class="nx">pusher</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pusher</span><span class="p">(</span><span class="s1">'your-pusher-key-here'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">pusher</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">'test_channel'</span><span class="p">);</span>
+
+<span class="c1">// Set up view model</span>
+<span class="c1">// This data could as well come from your backend</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">items</span><span class="o">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observableArray</span><span class="p">([</span>
+    <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nx">content</span><span class="o">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">"Foo"</span><span class="p">)},</span>
+    <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="nx">content</span><span class="o">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">"Bar"</span><span class="p">)}</span>
+  <span class="p">]),</span>
+  <span class="nx">foo</span><span class="o">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">"Foo"</span><span class="p">),</span>
+  <span class="nx">bar</span><span class="o">:</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">"Bar"</span><span class="p">)</span>
+<span class="p">};</span>
+
+<span class="c1">// Apply bindings</span>
+<span class="nx">ko</span><span class="p">.</span><span class="nx">applyBindings</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#viewModel"</span><span class="p">));</span>
+
+<span class="c1">// observe pusher channel for meta events</span>
+<span class="c1">// e.g. metaCreate, metaUpdate, metaDestroy</span>
+<span class="nx">Shoryuken</span><span class="p">.</span><span class="nx">observe</span><span class="p">(</span><span class="nx">channel</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="meta-events" class="anchor" href="#meta-events"><span class="octicon octicon-link"></span></a>Meta events</h3>
+
+<p>When you trigger meta events from your server side make sure it is pushed
+as follows:</p>
+
+<h4>
+<a name="metacreate" class="anchor" href="#metacreate"><span class="octicon octicon-link"></span></a>metaCreate</h4>
+
+<p>Event name: <code>metaCreate</code></p>
+
+<p>Event data:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+  <span class="nx">event</span><span class="o">:</span> <span class="s2">"metaCreate"</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">"Foo"</span><span class="p">,</span>
+    <span class="nx">description</span><span class="o">:</span> <span class="s2">"Bar"</span>
+  <span class="p">},</span>
+  <span class="nx">model</span><span class="o">:</span> <span class="s2">"model-name"</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="metaupdate" class="anchor" href="#metaupdate"><span class="octicon octicon-link"></span></a>metaUpdate</h4>
+
+<p>Event name: <code>metaUpdate</code></p>
+
+<p>Event data:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+  <span class="nx">event</span><span class="o">:</span> <span class="s2">"metaUpdate"</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">"Baz"</span><span class="p">,</span>
+    <span class="nx">description</span><span class="o">:</span> <span class="s2">"Qux"</span>
+  <span class="p">},</span>
+  <span class="nx">model</span><span class="o">:</span> <span class="s2">"model-name"</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="metadestroy" class="anchor" href="#metadestroy"><span class="octicon octicon-link"></span></a>metaDestroy</h4>
+
+<p>Event name: <code>metaDestroy</code></p>
+
+<p>Event data:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+  <span class="nx">event</span><span class="o">:</span> <span class="s2">"metaDestroy"</span><span class="p">,</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="nx">model</span><span class="o">:</span> <span class="s2">"model-name"</span>
+<span class="p">}</span>
+</pre></div>
         </section>
 
         <aside id="sidebar">
